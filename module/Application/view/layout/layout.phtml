@@ -1,0 +1,171 @@
+<?php echo $this->doctype(); ?>
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <?php echo $this->headTitle("BETWEEN HEARTS")?>
+        <?php
+        echo $this->headMeta()->appendName('viewport', 'width=device-width, initial-scale=1.0')?>
+        <meta property="wb:webmaster" content="4849d64b29cdda67" />
+<!-- Le styles -->
+        <?php
+        
+        echo $this->headLink(array(
+            'rel' => 'shortcut icon',
+            'type' => 'image/vnd.microsoft.icon',
+            'href' => $this->basePath() . '/img/favicon.ico'
+        ))
+            //->prependStylesheet($this->basePath() . '/css/style.css')
+            ->prependStylesheet($this->basePath() . '/css/bootstrap-theme.min.css')
+            ->prependStylesheet($this->basePath() . '/css/bootstrap.min.css')?>
+
+        <!-- Scripts -->
+        <?php
+        
+        echo $this->headScript()
+            ->prependFile($this->basePath() . '/js/bootstrap.min.js')
+            ->prependFile($this->basePath() . '/js/jquery.min.js')
+            ->prependFile($this->basePath() . '/js/respond.min.js', 'text/javascript', array(
+            'conditional' => 'lt IE 9'
+        ))
+            ->prependFile($this->basePath() . '/js/html5shiv.js', 'text/javascript', array(
+            'conditional' => 'lt IE 9'
+        ));
+        ?>
+    <script type="text/javascript">
+	function getXmlHttpObject(){
+		var xmlHttp=null;
+		try{
+			//firefox,Opera 8.0+,Safari
+			xmlHttp=new XMLHttpRequest();
+		}
+		catch(e){
+			//Internet Explorer
+			try{
+				xmlHttp=new ActiveXObject("Msxml2.XMLHTTP");
+			}catch(e){
+				xmlHttp=new ActiveXObject("Microsoft.XMLHTTP");
+			}
+		}
+		return xmlHttp;
+	}
+	var myXmlHttpRequest="";
+	function $(id){
+		return document.getElementById(id);
+	}
+	function getData(){
+		myXmlHttpRequest=getXmlHttpObject();
+		if(myXmlHttpRequest){
+			var url="./libweibo/weibolist.php?text="+$("wbContent").value;
+			myXmlHttpRequest.open("get",url,true);	
+			myXmlHttpRequest.onreadystatechange=action;
+			myXmlHttpRequest.send(null);
+		}else{
+			window.alert("创建ajax对象失败");
+		}
+		
+		
+	}
+	function action(){
+		if(myXmlHttpRequest.readyState==4){
+			var rt=myXmlHttpRequest.responseText;
+			window.alert(rt);
+		}
+	}
+    </script>
+</head>
+<body>
+    <?php
+    session_start();
+    
+    include_once ('libweibo/config.php');
+    include_once ('libweibo/saetv2.ex.class.php');
+    
+    $o = new SaeTOAuthV2(WB_AKEY, WB_SKEY);
+    
+    $code_url = $o->getAuthorizeURL(WB_CALLBACK_URL);
+
+    function isActive($str)
+    {
+        global $activeName;
+        if (isset($activeName) and $str == $activeName) {
+            echo "class=\"active\"";
+        } else {
+            echo "";
+        }
+    }
+    ?>
+        <div class="container-fluid">
+		<div class="row">
+
+			<nav class="navbar  navbar-default">
+				<div class="col-md-8 col-md-offset-2">
+					<div class="navbar-header">
+						<a class="navbar-brand" href="#">BETWEEN HEARTS</a>
+					</div>
+
+					<ul class="nav navbar-nav">
+						<li <?php isActive("index") ?>><a href="./index.html">首页<span
+								class="sr-only"></span></a></li>
+						<li <?php isActive("books") ?>><a href="./books.html">读书</a></li>
+						<li <?php isActive("bbs") ?>><a href="./bbs/forum.html">论坛</a></li>
+						<li <?php isActive("about") ?>><a href="./about.html">关于</a></li>
+					</ul>
+					<ul class="nav navbar-nav navbar-right">
+			<?php if(isset($_SESSION['username'])){?>
+			<li><?=$_SESSION['username']?>,
+				<button type="button" class="btn btn-default" id="username"
+								data-toggle="modal" data-target="#myModal">发布微博</button>
+							<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+								aria-labelledby="myModalLabel" aria-hidden="true">
+								<div class="modal-dialog">
+									<div class="modal-content">
+										<div class="modal-header">
+											<button type="button" class="close" data-dismiss="modal"
+												aria-label="Close">
+												<span aria-hidden="true">&times;</span>
+											</button>
+											<h4 class="modal-title" id="myModalLabel">发布微博</h4>
+										</div>
+										<div class="modal-body">
+											<textArea id="wbContent" rows="4" cols="85" maxlength=140
+												required=required></textArea>
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn btn-default"
+												data-dismiss="modal">Close</button>
+											<button type="button" class="btn btn-primary"
+												onclick="getData();" data-dismiss="modal">发布</button>
+										</div>
+									</div>
+								</div>
+							</div></li>
+			<?php }else{?>
+			<li><a href="<?=$code_url?>"><img
+								src="<?php echo $this->basePath() . '/img/weibo_login.png'?>"
+								title="点击进入授权页面" alt="点击进入授权页面" border="0" width="140"
+								height="25" /></a></li>
+			<?php }?>
+		</ul>
+				</div>
+			</nav>
+
+		</div>
+		
+            <?php echo $this->content; ?>
+            <hr>
+		<div class="row">
+			<div class="col-md-8 col-md-offset-2">
+				<footer>
+					<p>&copy; 2013 - <?php echo date('Y') ?> by wenning <?php echo $this->translate('All rights reserved.') ?></p>
+				</footer>
+			</div>
+		</div>
+		
+        <?php echo $this->inlineScript()?>
+    
+
+</div>
+	<!-- /container -->
+
+</body>
+</html>
