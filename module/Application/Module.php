@@ -11,6 +11,10 @@ namespace Application;
 
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
+use Application\Model\FavourTable;
+use Zend\Db\ResultSet\ResultSet;
+use Zend\Db\TableGateway\TableGateway;
+use Application\Model\Entity\Favour;
 
 class Module
 {
@@ -36,4 +40,23 @@ class Module
             ),
         );
     }
+    public function getServiceConfig()
+    {
+        return array(
+            'factories'=>array(
+                'Application\Model\FavourTable'=>function($sm){
+                    $dbAdapter=$sm->get('FavourTableGateway');
+                    $table=new FavourTable($dbAdapter);
+                    return $table;
+                },
+                'FavourTableGateway'=>function ($sm) {
+                     $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                     $resultSetPrototype = new ResultSet();
+                     $resultSetPrototype->setArrayObjectPrototype(new Favour());
+                     return new TableGateway('favour', $dbAdapter, null, $resultSetPrototype);
+                 },
+            ),
+        );
+    }
+    
 }

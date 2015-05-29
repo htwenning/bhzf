@@ -1,8 +1,7 @@
 <?php
-	$activeName="index";
-	include_once("index_header.php");
-	include_once("./db/ShowMessages.php");
-	include_once("./db/Favour.php");
+$activeName = "index";
+//include_once ("index_header.php");
+//include_once ("./db/Favour.php");
 ?>
 <script type="text/javascript">
 	//创建ajax引擎
@@ -61,29 +60,31 @@
 	}
 </script>
 <div class="row-fluid">
-<div class="col-md-8 col-md-offset-2">
-	<header class=" subhead" id="overview">
-				
-		<div class="alert alert-success" role="alert">
-		<h1><span class="glyphicon glyphicon-heart" aria-hidden="true" style="cursor: pointer;color: #F00;" onclick="favour();"></span>
-		<small><span class="badge" id="favour">
-			<?php
-			$favour=new Favour();
-			echo $favour->getValue("num");
-			?>
-		</span></small>今天是第<?php include_once("timer.php"); ?>天</h1>
-		</div>
-            
-    </header>
-</div>
+	<div class="col-md-8 col-md-offset-2">
+		<header class=" subhead" id="overview">
+
+			<div class="alert alert-success" role="alert">
+				<h1>
+					<span class="glyphicon glyphicon-heart" aria-hidden="true"
+						style="cursor: pointer; color: #F00;" onclick="favour();"></span>
+					<small><span class="badge" id="favour">
+			<?=$this->favourNum?>
+		</span></small>今天是第<?php //include_once("timer.php"); ?>天</h1>
+			</div>
+
+		</header>
+	</div>
 </div>
 <div class="row-fluid">
 	<div class="col-md-8 col-md-offset-2">
-        <div class="jumbotron">
+		<div class="jumbotron">
 			<h1>在宁静的一念之间，</h1>
 			<p>我想脱离这恼人的尘世，在苍山残阳下，与你一同抓住天边的温暖，守住心中没有陨落的梦想。</p>
 			<?php if(isset($_SESSION["username"])){ ?>
-				<p><a class="btn btn-primary btn-lg" href="http://www.betweenhearts.org/blogs">进入博客</a></p>
+				<p>
+				<a class="btn btn-primary btn-lg"
+					href="http://www.betweenhearts.org/blogs">进入博客</a>
+			</p>
 			<?php }else{?>
 			
 			<?php }?>
@@ -92,47 +93,74 @@
 	</div>
 </div>
 <div class="row-fluid">
-	
-    	<!--内容-->
+
+	<!--内容-->
 		<?php
-			if(isset($_POST["action"]) and $_POST["action"]=="writeMessage"){
-				$_POST["action"]="";
-				processForm();
-				
-			}else{
-			}
-			function processForm(){
-				$requireFields=array("content","email");
-				$missingFields=array();
-				$errorMessages=array();
-				if(!isset($_POST["content"])){
-					echo '<p class="error">内容不能为空</p>';
-					return;
-				}
-				$message=new Message(array("content"=>$_POST["content"],"email"=>isset($_POST["email"])?$_POST["email"]:$_SESSION["username"]));
-				$message->insert();
-			}
-		?>
+if (isset($_POST["action"]) and $_POST["action"] == "writeMessage") {
+    $_POST["action"] = "";
+    processForm();
+} else {}
+
+function processForm()
+{
+    $requireFields = array(
+        "content",
+        "email"
+    );
+    $missingFields = array();
+    $errorMessages = array();
+    if (! isset($_POST["content"])) {
+        echo '<p class="error">内容不能为空</p>';
+        return;
+    }
+    $message = new Message(array(
+        "content" => $_POST["content"],
+        "email" => isset($_POST["email"]) ? $_POST["email"] : $_SESSION["username"]
+    ));
+    $message->insert();
+}
+?>
 		<div class="col-md-8 col-md-offset-2">
-			<form class="form-horizontal pull-left" method="post" >
-				<input type="hidden" name="action" value="writeMessage"/>
-						<div class="input-group input-group-lg">
+		<form class="form-horizontal pull-left" method="post">
+			<input type="hidden" name="action" value="writeMessage" />
+			<div class="input-group input-group-lg">
 							<?php if(isset($_SESSION["username"])){ ?>
-								<input name="content" type="text" class="form-control" placeholder="留言不能为空" size="90"/>
-								<span class="input-group-btn">
-									<button class="btn btn-info" type="submit">留言</button>
-								</span>	
+								<input name="content" type="text" class="form-control"
+					placeholder="留言不能为空" size="90" /> <span class="input-group-btn">
+					<button class="btn btn-info" type="submit">留言</button>
+				</span>	
 							<?php }else{?>
-							<input name="content" type="text" class="form-control" placeholder="登陆后才能留言" size="90"/>
-							<span class="input-group-btn">
-								<button class="btn btn-info active" type="button" onclick="loginAlert();">留言</button>
-							</span>	
+							<input name="content" type="text" class="form-control"
+					placeholder="登陆后才能留言" size="90" /> <span class="input-group-btn">
+					<button class="btn btn-info active" type="button"
+						onclick="loginAlert();">留言</button>
+				</span>	
 							<?php }?>
 							
-						</div>	
-					
-			</form>
-		</div>
+						</div>
+
+		</form>
+	</div>
 </div>
-			<br>
-			<?php showMessages(); ?>
+<br>
+<div class="row-fluid">
+	<div class="col-md-8 col-md-offset-2">
+		<table class="table table-hover">
+			<tr>
+				<td width="4">#</td>
+				<td width="50">content</td>
+				<td width="20">email</td>
+			</tr>
+			<?php
+foreach ($this->messages as $one) {
+    
+    echo "<tr>\n";
+    echo "<td>" . $one->getId("id") . "</td>";
+    echo "<td>" . $one->getContent("content") . "</td>";
+    echo "<td>" . $one->getEmail("email") . "</td>";
+    echo "</tr>\n";
+}
+?>
+			</table>
+	</div>
+</div>

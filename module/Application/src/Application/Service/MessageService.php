@@ -32,7 +32,7 @@ class MessageService implements MessageServiceInterface
         $model=new Message();
         $model->setId($messageData['id']);
         $model->setContent($messageData['content']);
-        $model->setText($messageData['email']);
+        $model->setEmail($messageData['email']);
         return $model;
     }
 }
