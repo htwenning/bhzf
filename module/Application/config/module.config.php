@@ -60,6 +60,9 @@ return array(
         'aliases' => array(
             'translator' => 'MvcTranslator',
         ),
+        'invokables'=>array(
+            'Application\Service\MessageServiceInterface'=>'Application\Service\MessageService'
+        ),
     ),
     'translator' => array(
         'locale' => 'en_US',
@@ -72,8 +75,8 @@ return array(
         ),
     ),
     'controllers' => array(
-        'invokables' => array(
-            'Application\Controller\Index' => 'Application\Controller\IndexController'
+        'factories' => array(
+            'Application\Controller\Index' => 'Application\Factory\IndexControllerFactory'
         ),
     ),
     'view_manager' => array(

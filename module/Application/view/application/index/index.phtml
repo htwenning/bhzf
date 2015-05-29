@@ -40,7 +40,7 @@
 			var url="./favour.php?username="+$("username").innerHTML;
 			myXmlHttpRequest.open("get",url,true);
 			//指定回调函数
-			myXmlHttpRequest.onreadystatechange=action;
+			myXmlHttpRequest.onreadystatechange=favouraction;
 			//get方法，填null
 			//如果是post填入实际的数据
 			myXmlHttpRequest.send(null);
@@ -50,7 +50,7 @@
 		
 		
 	}
-	function action(){
+	function favouraction(){
 		if(myXmlHttpRequest.readyState==4){
 			var jsonText=myXmlHttpRequest.responseText;
 			//window.alert(jsonText);
