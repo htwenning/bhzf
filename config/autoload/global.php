@@ -21,7 +21,7 @@ return array(
     ),
     'service_manager'=>array(
         'factories'=>array(
-            'Zend\Db\Adapter\Adapter'=>'Zend\Db\Adapter\AdapterAbstractServiceFactory',
+            'Zend\Db\Adapter\Adapter'=>'Zend\Db\Adapter\AdapterServiceFactory',
         )
     )
 );
