@@ -17,6 +17,7 @@ class IndexController extends AbstractActionController
 
     protected $messageService;
     protected $favourTable;
+    protected $username;
     public function getFavourTable(){
         if(!$this->favourTable){
             $sm=$this->getServiceLocator();
@@ -26,12 +27,15 @@ class IndexController extends AbstractActionController
     }
     public function __construct(MessageServiceInterface $messageService)
     {
-        
+        session_start();
         $this->messageService = $messageService;
     }
 
     public function indexAction()
     {
+        $this->username='微博用户';
+        $_SESSION['username']=$this->username;
+        $_SESSION['loginUrl']='#';
         $favours=$this->getFavourTable()->fetchAll();
         return array(
             'messages'=>$this->messageService->findAllMessages(),

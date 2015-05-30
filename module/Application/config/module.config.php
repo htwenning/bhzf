@@ -10,6 +10,12 @@
 return array(
     'router' => array(
         'routes' => array(
+            'book'=>array(
+                'type'=>'Literal',
+                'options'=>array(
+                    'route'=>'/book',
+                ),
+            ),
             'home' => array(
                 'type' => 'Zend\Mvc\Router\Http\Literal',
                 'options' => array(
@@ -63,6 +69,9 @@ return array(
         'invokables'=>array(
             'Application\Service\MessageServiceInterface'=>'Application\Service\MessageService'
         ),
+        'factories'=>array(
+            'navigation'=>'Zend\Navigation\Service\DefaultNavigationFactory',
+        ),
     ),
     'translator' => array(
         'locale' => 'en_US',
@@ -102,4 +111,16 @@ return array(
             ),
         ),
     ),
+    'navigation'=>array(
+        'default'=>array(
+            array(
+            'label'=>'首页',
+            'route'=>'home',
+            ),
+            array(
+            'label'=>'读书',
+            'route'=>'book',
+            ),
+        )
+    )
 );
