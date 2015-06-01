@@ -33,7 +33,7 @@ class FavourTable
     public function saveFavour(Favour $favour)
     {
         $data = array(
-            'username' => 'h',
+            'username' => $favour->getUsername(),
         );
         $id=(int)$favour->getId();
         $this->tableGateway->insert($data);

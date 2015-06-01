@@ -52,12 +52,12 @@
 	function $(id){
 		return document.getElementById(id);
 	}
-	function getData(){
+	function sendWeibo(){
 		myXmlHttpRequest=getXmlHttpObject();
 		if(myXmlHttpRequest){
 			var url="./libweibo/weibolist.php?text="+$("wbContent").value;
 			myXmlHttpRequest.open("get",url,true);	
-			myXmlHttpRequest.onreadystatechange=action;
+			myXmlHttpRequest.onreadystatechange=sendWeiboAction;
 			myXmlHttpRequest.send(null);
 		}else{
 			window.alert("创建ajax对象失败");
@@ -65,7 +65,7 @@
 		
 		
 	}
-	function action(){
+	function sendWeiboAction(){
 		if(myXmlHttpRequest.readyState==4){
 			var rt=myXmlHttpRequest.responseText;
 			window.alert(rt);
@@ -99,7 +99,7 @@
 						<li <?php if($_SESSION['nav']=='about') echo "class=\"active\""?>><a href="./about.html">关于</a></li>
 					</ul>
 					<ul class="nav navbar-nav navbar-right">
-			<?php if(true){?>
+			<?php if(isset($_SESSION['username'])){?>
 			<li><label id="username"><?=$_SESSION['username']?></label>
 				<button type="button" class="btn btn-default" 
 								data-toggle="modal" data-target="#myModal">发布微博</button>
@@ -122,7 +122,7 @@
 											<button type="button" class="btn btn-default"
 												data-dismiss="modal">Close</button>
 											<button type="button" class="btn btn-primary"
-												onclick="getData();" data-dismiss="modal">发布</button>
+												onclick="sendWeibo();" data-dismiss="modal">发布</button>
 										</div>
 									</div>
 								</div>

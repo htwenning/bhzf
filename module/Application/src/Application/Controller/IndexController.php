@@ -12,6 +12,7 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Application\Service\MessageServiceInterface;
 use Zend\View\Helper\ViewModel;
 use Application\Model\Entity\Favour;
+use Application\Functions\CountDays;
 
 class IndexController extends AbstractActionController
 {
@@ -34,14 +35,16 @@ class IndexController extends AbstractActionController
 
     public function indexAction()
     {
-        $this->username='微博用户';
-        $_SESSION['username']=$this->username;
+        //$this->username='微博用户';
+        //$_SESSION['username']=$this->username;
         $_SESSION['loginUrl']='#';
         $_SESSION['nav']='index';
         $favours=$this->getFavourTable()->fetchAll();
+        $countDays=(new CountDays())->countDays();
         return array(
             'messages'=>$this->messageService->findAllMessages(),
             'favourNum'=>count($favours),
+            'countDays'=>$countDays,
         );
     }
     public function addFavourAction(){
