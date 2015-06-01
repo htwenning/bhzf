@@ -45,15 +45,15 @@ class Module
         return array(
             'factories'=>array(
                 'Application\Model\FavourTable'=>function($sm){
-                    $dbAdapter=$sm->get('FavourTableGateway');
-                    $table=new FavourTable($dbAdapter);
+                    $tableGateway=$sm->get('FavourTableGateway');
+                    $table=new FavourTable($tableGateway);
                     return $table;
                 },
                 'FavourTableGateway'=>function ($sm) {
                      $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
-                     $resultSetPrototype = new ResultSet();
-                     $resultSetPrototype->setArrayObjectPrototype(new Favour());
-                     return new TableGateway('favour', $dbAdapter, null, $resultSetPrototype);
+                     $resultSet = new \Zend\Db\ResultSet\ResultSet();
+                     $resultSet->setArrayObjectPrototype(new Favour());
+                     return new TableGateway('favour', $dbAdapter, null, $resultSet);
                  },
             ),
         );

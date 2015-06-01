@@ -1,8 +1,4 @@
-<?php
-$activeName = "index";
-//include_once ("index_header.php");
-//include_once ("./db/Favour.php");
-?>
+
 <script type="text/javascript">
 	//创建ajax引擎
 	function getXmlHttpObject(){
@@ -35,28 +31,37 @@ $activeName = "index";
 		}
 		myXmlHttpRequest=getXmlHttpObject();
 		if(myXmlHttpRequest){
-			//window.alert("创建ajax引擎成功");		
-			var url="./favour.php?username="+$("username").innerHTML;
-			myXmlHttpRequest.open("get",url,true);
+			window.alert("创建ajax引擎成功");		
+			var url="/bhzf/public/application/index/addFavour";
+			myXmlHttpRequest.open("post",url,true);
 			//指定回调函数
 			myXmlHttpRequest.onreadystatechange=favouraction;
 			//get方法，填null
 			//如果是post填入实际的数据
-			myXmlHttpRequest.send(null);
+			myXmlHttpRequest.setRequestHeader("Content-type","application/x-www-form-urlencoded;");
+			myXmlHttpRequest.send("username="+$("username").innerHTML);
 		}else{
 			window.alert("创建ajax引擎失败");
 		}
 		
 		
 	}
+	
 	function favouraction(){
+		if(myXmlHttpRequest.readyState==3){
+			 window.alert('请求处理中');
+		}
 		if(myXmlHttpRequest.readyState==4){
 			var jsonText=myXmlHttpRequest.responseText;
-			//window.alert(jsonText);
 			var jsonObject=eval("("+jsonText+")");
+			window.alert(""+jsonText);
 			var num=jsonObject.num;	
 			$("favour").innerHTML = num;
+			//var username=urldecode(jsonObject.username);
 		}
+	}
+	function urldecode(str) {
+	    return decodeURIComponent((str+'').replace(/\+/g, '%20'));
 	}
 </script>
 <div class="row-fluid">

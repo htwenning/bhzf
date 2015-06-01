@@ -85,12 +85,6 @@
     ?>
         <div class="container-fluid">
 		<div class="row">
-<?php echo $this->navigation('navigation')
-                ->menu()
-                ->setMinDepth(0)
-                ->setMaxDepth(0)
-                ->setUlClass("nav-navbar");
-?>
 			<nav class="navbar  navbar-default">
 				<div class="col-md-8 col-md-offset-2">
 					<div class="navbar-header">
@@ -98,16 +92,16 @@
 					</div>
 
 					<ul class="nav navbar-nav">
-						<li ><a href="./index.html">首页<span
+						<li <?php if($_SESSION['nav']=='index') echo "class=\"active\""?>><a href="./index.html">首页<span
 								class="sr-only"></span></a></li>
-						<li ><a href="./books.html">读书</a></li>
-						<li ><a href="./bbs/forum.html">论坛</a></li>
-						<li ><a href="./about.html">关于</a></li>
+						<li <?php if($_SESSION['nav']=='book') echo "class=\"active\""?>><a href="./books.html">读书</a></li>
+						
+						<li <?php if($_SESSION['nav']=='about') echo "class=\"active\""?>><a href="./about.html">关于</a></li>
 					</ul>
 					<ul class="nav navbar-nav navbar-right">
 			<?php if(true){?>
-			<li><?=$_SESSION['username']?>,<?=$_SESSION['loginUrl']?>
-				<button type="button" class="btn btn-default" id="username"
+			<li><label id="username"><?=$_SESSION['username']?></label>
+				<button type="button" class="btn btn-default" 
 								data-toggle="modal" data-target="#myModal">发布微博</button>
 							<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
 								aria-labelledby="myModalLabel" aria-hidden="true">
@@ -134,7 +128,7 @@
 								</div>
 							</div></li>
 			<?php }else{?>
-			<li><a href="<?=$this->loginUrl?>"><img
+			<li><a href="<?=$_SESSION['loginUrl']?>"><img
 								src="<?php echo $this->basePath() . '/img/weibo_login.png'?>"
 								title="点击进入授权页面" alt="点击进入授权页面" border="0" width="140"
 								height="25" /></a></li>
@@ -146,7 +140,7 @@
 		</div>
 		
             <?php echo $this->content; ?>
-            <hr>
+            
 		<div class="row">
 			<div class="col-md-8 col-md-offset-2">
 				<footer>

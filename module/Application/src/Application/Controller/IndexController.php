@@ -11,6 +11,7 @@ namespace Application\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Application\Service\MessageServiceInterface;
 use Zend\View\Helper\ViewModel;
+use Application\Model\Entity\Favour;
 
 class IndexController extends AbstractActionController
 {
@@ -36,10 +37,26 @@ class IndexController extends AbstractActionController
         $this->username='微博用户';
         $_SESSION['username']=$this->username;
         $_SESSION['loginUrl']='#';
+        $_SESSION['nav']='index';
         $favours=$this->getFavourTable()->fetchAll();
         return array(
             'messages'=>$this->messageService->findAllMessages(),
             'favourNum'=>count($favours),
         );
     }
+    public function addFavourAction(){
+        $request=$this->getRequest();
+        $response=$this->getResponse();
+        if($request->isPost()){
+            $post_data=$request->getPost();
+            $favour=new Favour();
+            $favour->exchangeArray($post_data);
+            //插入新的favour
+            $this->getFavourTable()->saveFavour($favour);
+            $favours=$this->getFavourTable()->fetchAll();
+        }
+        $response->setContent(\Zend\Json\Json::encode(array('num'=>count($favours))));
+        return $response;
+    }
+ 
 }

@@ -19,12 +19,27 @@ class FavourTable
         $resultSet = $this->tableGateway->select();
         return $resultSet;
     }
+    public function getFavour(){
+        $id = (int) $id;
+        $rowset=$this->tableGateway->selet(array('id'=>$id));
+        $row=$rowset->current();
+        if(!$row){
+            throw new \Exception("Could not find row $id");
+            
+        }
+        return $row;
+    }
 
     public function saveFavour(Favour $favour)
     {
         $data = array(
-            'username' => $favour->username,
+            'username' => 'h',
         );
+        $id=(int)$favour->getId();
         $this->tableGateway->insert($data);
+        if($id==null){
+            
+        }
+        
     }
 }
